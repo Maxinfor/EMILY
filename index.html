@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ilha da Sabedoria</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
     <style>
-        body { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); font-family: 'Fredoka One', cursive; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: #444; }
+        body { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: #444; }
         .card { background: white; padding: 30px; border-radius: 40px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.15); border-bottom: 10px solid #74b9ff; }
         input { width: 85%; padding: 15px; border-radius: 20px; border: 3px solid #dfe6e9; font-size: 1.2rem; margin: 15px 0; background: #f9f9f9; text-align: center; }
-        button { background: #74b9ff; color: white; padding: 15px 30px; border: none; border-radius: 20px; font-size: 1.2rem; cursor: pointer; width: 100%; transition: 0.3s; }
-        button:hover { background: #0984e3; transform: scale(1.02); }
+        button { background: #74b9ff; color: white; padding: 15px 30px; border: none; border-radius: 20px; font-size: 1.2rem; cursor: pointer; width: 100%; }
         .stats { display: flex; justify-content: space-between; font-size: 1.1rem; color: #636e72; margin-bottom: 10px;}
-        #feedback { font-size: 1rem; color: #636e72; height: 20px; }
     </style>
 </head>
 <body>
@@ -22,7 +19,7 @@
         <span>💎 <span id="moedas">0</span></span>
         <span>🚀 Fase <span id="fase">1</span></span>
     </div>
-    <h2 id="pergunta">Carregando...</h2>
+    <h2 id="pergunta">Carregando jogo...</h2>
     <input type="text" id="resposta" placeholder="Sua resposta...">
     <button onclick="verificar()">ENVIAR RESPOSTA</button>
     <p id="feedback"></p>
@@ -30,5 +27,42 @@
 
 <script>
     const bancos = {
-        1: [{q: "5 + 5? 🍎", r: "10"}, {q: "Cor da banana? 🍌", r: "amarelo"}, {q: "10 - 3? 🎈", r: "7"}, {q: "Oposto de 'Grande'? 🐘", r: "pequeno"}, {q: "2 x 4? 🌟", r: "8"}, {q: "Pernas de um gato? 🐱", r: "4"}, {q: "Depois do 9? 🔢", r: "10"}, {q: "Antônimo de 'Dia'? ☀️", r: "noite"}, {q: "15 + 5?
+        1: [{q: "5 + 5?", r: "10"}, {q: "Cor da banana?", r: "amarelo"}, {q: "10 - 3?", r: "7"}],
+        2: [{q: "12 + 18?", r: "30"}, {q: "Segundos num minuto?", r: "60"}]
+    };
 
+    // Função de inicialização forçada
+    window.onload = function() {
+        console.log("Sistema iniciado");
+        let moedas = parseInt(localStorage.getItem('moedas')) || 0;
+        let fase = parseInt(localStorage.getItem('fase')) || 1;
+        document.getElementById('moedas').innerText = moedas;
+        document.getElementById('fase').innerText = fase;
+        novaPergunta();
+    };
+
+    function novaPergunta() {
+        let fase = parseInt(localStorage.getItem('fase')) || 1;
+        let lista = bancos[fase] || bancos[1];
+        let indice = Math.floor(Math.random() * lista.length);
+        document.getElementById('pergunta').innerText = lista[indice].q;
+        window.perguntaAtual = lista[indice]; // Salva a pergunta atual na memória
+    }
+
+    function verificar() {
+        let res = document.getElementById('resposta').value.trim().toLowerCase();
+        if (res === window.perguntaAtual.r.toLowerCase()) {
+            let moedas = parseInt(localStorage.getItem('moedas')) || 0;
+            moedas += 50;
+            localStorage.setItem('moedas', moedas);
+            document.getElementById('moedas').innerText = moedas;
+            document.getElementById('feedback').innerText = "Correto! ✨";
+            document.getElementById('resposta').value = "";
+            novaPergunta();
+        } else {
+            document.getElementById('feedback').innerText = "Tente de novo! 🌸";
+        }
+    }
+</script>
+</body>
+</html>
