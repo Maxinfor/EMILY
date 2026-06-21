@@ -2,93 +2,22 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ilha da Sabedoria</title>
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-            font-family: 'Fredoka One', cursive; color: white; text-align: center; 
-            margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center;
-        }
-        .card { 
-            background: rgba(255, 255, 255, 0.15); padding: 25px; border-radius: 30px; 
-            backdrop-filter: blur(15px); border: 2px solid rgba(255, 255, 255, 0.3);
-            width: 90%; max-width: 350px;
-        }
-        input { 
-            width: 85%; padding: 15px; border-radius: 20px; border: none; 
-            font-size: 1.1rem; text-align: center; margin-bottom: 10px;
-        }
-        button { 
-            background: #ff4757; color: white; padding: 15px 30px; border: none; 
-            border-radius: 20px; font-size: 1.1rem; cursor: pointer; width: 100%;
-        }
-        .stats { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.2rem; }
-    </style>
 </head>
 <body>
-
-<div class="card">
-    <div class="stats">
-        <span>💎 <span id="moedas">0</span></span>
-        <span>🚀 Fase <span id="fase">1</span></span>
+    <div class="card">
+        <div class="stats">
+            <span>💎 <span id="moedas">0</span></span>
+            <span>🚀 Fase <span id="fase">1</span></span>
+        </div>
+        <h2 id="pergunta">Carregando...</h2>
+        <input type="text" id="resposta" placeholder="Resposta...">
+        <button onclick="verificar()">ENVIAR</button>
+        <p id="feedback"></p>
     </div>
-    <h2 id="pergunta">Carregando...</h2>
-    <input type="text" id="resposta" placeholder="Resposta...">
-    <button onclick="verificar()">ENVIAR</button>
-    <p id="feedback"></p>
-</div>
-
-<script>
-    const banco = [
-        { q: "Quanto é 15 + 10?", r: "25" }, { q: "Antônimo de 'Alto'?", r: "baixo" },
-        // ... (Adicione aqui suas 20+ perguntas)
-    ];
-
-    let moedas = parseInt(localStorage.getItem('moedas')) || 0;
-    let fase = parseInt(localStorage.getItem('fase')) || 1;
-    let acertosFase = 0;
-    let ultimaPergunta = -1;
-
-    function atualizarTela() {
-        document.getElementById('moedas').innerText = moedas;
-        document.getElementById('fase').innerText = fase;
-    }
-
-    function novaPergunta() {
-        let indice;
-        do { indice = Math.floor(Math.random() * banco.length); } while (indice === ultimaPergunta);
-        ultimaPergunta = indice;
-        document.getElementById('pergunta').innerText = banco[indice].q;
-    }
-
-    function verificar() {
-        let res = document.getElementById('resposta').value.trim().toLowerCase();
-        if (res === banco[ultimaPergunta].r.toLowerCase()) {
-            moedas += 50;
-            acertosFase++;
-            
-            if (acertosFase >= 20) {
-                fase++;
-                acertosFase = 0;
-                moedas += 200; // Bônus de fase
-                alert("PARABÉNS! Você passou para a fase " + fase + "! +200 moedas!");
-            }
-            
-            localStorage.setItem('moedas', moedas);
-            localStorage.setItem('fase', fase);
-            document.getElementById('feedback').innerText = "MUITO BEM! ✨";
-            atualizarTela();
-            novaPergunta();
-        } else {
-            document.getElementById('feedback').innerText = "Tente de novo! 🌸";
-        }
-        document.getElementById('resposta').value = "";
-    }
-
-    atualizarTela();
-    novaPergunta();
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
