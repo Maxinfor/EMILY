@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Arquipélago Esquecido</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: radial-gradient(circle, #1a1a2e, #000); color: #fff; font-family: 'Orbitron', sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; margin: 0; }
+        .card { background: rgba(22, 33, 62, 0.9); padding: 40px; border-radius: 25px; border: 2px solid #3498db; text-align: center; width: 350px; box-shadow: 0 0 20px #3498db; }
+        input { width: 80%; padding: 12px; margin: 20px 0; border-radius: 10px; border: none; text-align: center; font-size: 1.2rem; }
+        button { background: #e94560; color: white; padding: 12px 25px; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        #feedback { margin-top: 15px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>ILHA DA SABEDORIA</h1>
+    <p>Moedas: <span id="pontuacao">0</span> | Nível: <span id="nivel">1</span></p>
+    <h2 id="pergunta">Carregando...</h2>
+    <input type="text" id="resposta" placeholder="Sua resposta">
+    <button onclick="verificar()">DESTRAVAR</button>
+    <p id="feedback"></p>
+</div>
+
+<script>
+    const banco = [
+        { q: "Quanto é 15 + 10?", r: "25" },
+        { q: "Antônimo de 'Alto'?", r: "baixo" },
+        { q: "Quanto é 5 x 5?", r: "25" },
+        { q: "Sinônimo de 'Feliz'?", r: "alegre" }
+    ];
+    
+    let moedas = parseInt(localStorage.getItem('moedas')) || 0;
+    let atual = {};
+
+    function novaPergunta() {
+        atual = banco[Math.floor(Math.random() * banco.length)];
+        document.getElementById('pergunta').innerText = atual.q;
+    }
+
+    function verificar() {
+        let res = document.getElementById('resposta').value.toLowerCase();
+        if (res === atual.r.toLowerCase()) {
+            moedas += 50;
+            localStorage.setItem('moedas', moedas);
+            document.getElementById('pontuacao').innerText = moedas;
+            document.getElementById('feedback').innerText = "CORRETO! +50 MOEDAS";
+            document.getElementById('feedback').style.color = "#2ecc71";
+            novaPergunta();
+        } else {
+            document.getElementById('feedback').innerText = "TENTE NOVAMENTE!";
+            document.getElementById('feedback').style.color = "#e94560";
+        }
+        document.getElementById('resposta').value = "";
+    }
+
+    document.getElementById('pontuacao').innerText = moedas;
+    novaPergunta();
+</script>
+
+</body>
+</html>
